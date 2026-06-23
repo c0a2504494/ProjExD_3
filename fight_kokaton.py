@@ -114,9 +114,6 @@ class Beam:
     def is_out(self):
         return check_bound(self.rct) != (True, True)
 
-
-
-
 class Bomb:
     """
     爆弾に関するクラス
