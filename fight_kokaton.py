@@ -8,6 +8,7 @@ import pygame as pg
 WIDTH = 1100  # ゲームウィンドウの幅
 HEIGHT = 650  # ゲームウィンドウの高さ
 NUM_OF_BOMBS = 5
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -85,6 +86,8 @@ class Bird:
         screen.blit(self.img, self.rct)
 
 
+
+
 class Beam:
     """
     こうかとんが放つビームに関するクラス
@@ -107,6 +110,8 @@ class Beam:
         if check_bound(self.rct) == (True, True):
             self.rct.move_ip(self.vx, self.vy)
             screen.blit(self.img, self.rct) 
+
+
 
 
 class Bomb:
@@ -140,6 +145,24 @@ class Bomb:
         screen.blit(self.img, self.rct)
 
 
+class Score:
+    """
+    スコア管理クラス
+    """
+    def __init__(self):
+        self.fonto = pg.font.Font(None, 50)
+        self.color = (0, 0, 255)
+        self.value = 0
+        self.img = self.fonto.render(f"Score: {self.value}", 0, self.color)
+        self.rct = self.img.get_rect()
+        self.rct.center = (100, HEIGHT-50)
+
+    def update(self, screen: pg.Surface):
+        self.img = self.fonto.render(f"Score: {self.value}", 0, self.color)
+        screen.blit(self.img, self.rct)
+        
+
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
@@ -148,6 +171,10 @@ def main():
     # bomb = Bomb((255, 0, 0), 10)
     bombs = [Bomb((255, 0, 0), 10) for i in range(NUM_OF_BOMBS)]
     beam = None  # ゲーム初期化時にはビームは存在しない
+
+    score=Score()
+
+
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -173,6 +200,7 @@ def main():
                     bird.change_img(6, screen)
                     pg.display.update()
                     time.sleep(1)
+                    score.value += 1 
                     beam = None
                     bombs[i] = None
 
@@ -181,30 +209,23 @@ def main():
         for bomb in bombs:
             bomb.update(screen)
 
-
-
-
-
-
-
-
-
-        
         for i, bomb in enumerate(bombs):
             if bird.rct.colliderect(bomb.rct):
                 bird.change_img(8, screen)
                 pg.display.update()
                 time.sleep(1)
+                
                 return
-
-        
+            
+        score.update(screen)
         pg.display.update()
         tmr += 1
         clock.tick(50)
 
 
+        
 
-    
+        
 
 
 if __name__ == "__main__":
