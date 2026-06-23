@@ -163,8 +163,6 @@ class Score:
     def update(self, screen: pg.Surface):
         self.img = self.fonto.render(f"Score: {self.value}", 0, self.color)
         screen.blit(self.img, self.rct)
-        
-
 
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
